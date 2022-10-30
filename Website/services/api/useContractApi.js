@@ -1,19 +1,16 @@
-import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
 
-import ERC721Singleton from './ERC721SingletonApi';
 
 export default function useContract(privateKey) {
 	let contract = null;
 	const fetchData = async () => {
 		try {
-			const provider = new ethers.providers.JsonRpcProvider("https://testnet-rpc.coinex.net")
-
-			const signer = new ethers.Wallet(privateKey, provider);
-
-			// Sets a single instance of a specific contract per application
-			// Useful for switching across multiple contracts in a single application
-			contract = ERC721Singleton(signer);
+			const fullNode = 'https://api.nileex.io';
+			const solidityNode = 'https://api.nileex.io';
+			const eventServer = 'https://event.nileex.io';
+			const privateKey = privateKey;
+			const tronWeb = new TronWeb(fullNode, solidityNode, eventServer, privateKey);
+			contract = await tronWeb.contract().at('TBT8DZwpUCdTknZvvyWbtjn5xG3LK9oqHz');
+	
 
 		} catch (error) {
 			console.error(error);

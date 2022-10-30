@@ -22,43 +22,12 @@ export default function Login() {
     await onClickConnect()
     window.location.href = redirecting
   }
-  //Connecting with metamask
-  async function onClickConnect() {                     //Connecting with metamask
-    let result = await window.ethereum.request({ method: 'eth_requestAccounts' });
+  //Connecting with TronLink
+  async function onClickConnect() {                     //Connecting with TronLink
+    
+    let result = await window.tronWeb.request({ method: 'tron_requestAccounts' });
     result;
-    try {
-      const getacc = await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x35', }], //53
-      });
-      getacc;
-    } catch (switchError) {
-      // This error code indicates that the chain has not been added to MetaMask.
-      if (switchError.code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: '0x35', //53
-                chainName: 'csc-testnet',
-                nativeCurrency: {
-                  name: 'tCET',
-                  symbol: 'tCET',
-                  decimals: 18,
-                },
-                rpcUrls: ['https://testnet-rpc.coinex.net'],
-              },
-            ],
-          });
-        } catch (addError) {
-          // handle "add" error
-          console.log(addError);
-        }
-      }
-      // handle other "switch" errors
-    }
-    window.localStorage.setItem('ConnectedMetaMask', 'true')
+    window.localStorage.setItem('TronLink', 'true')
   }
   function EventManger() {                             //Event Manager Button
     if (window.localStorage.getItem('Type') == 'manager') {

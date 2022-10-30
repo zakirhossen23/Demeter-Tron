@@ -13,7 +13,7 @@ let EventEnd= '';
 let EventWaiting= false;
 export default function AuctionNFT() {
   //variables
-  const { contract, signerAddress } = useContract('ERC721')
+  const { contract, signerAddress } = useContract();
   const [eventId, setEventId] = useState(-1)
   const [list, setList] = useState([])
   const [imageList, setimageList] = useState([])
@@ -188,7 +188,7 @@ export default function AuctionNFT() {
         var n = new Date().getTime()
         var d = c - n
         var s = Math.floor((d % (1000 * 60)) / 1000)
-        if (s.toString().includes('-') && object.properties.wallet.description === window.ethereum.selectedAddress && valueAll[2] !== "Finished") {
+        if (s.toString().includes('-') && object.properties.wallet.description === window.tronWeb.defaultAddress.base58 && valueAll[2] !== "Finished") {
           EventWaiting = true;
         }
       }
@@ -244,9 +244,8 @@ export default function AuctionNFT() {
       await contract
         .DistributeToken(eventId)
         .send({
-          from: signerAddress,
-          gasPrice: 500000000000,
-          gas: 5_000_000,
+          feeLimit:100_000_000,
+        shouldPollResponse:false
         })
 
     } catch (error) {
@@ -280,7 +279,7 @@ window.location.reload()
                 <h2 className="m-progress-meter-heading">
                   {EventEarned}
                   <span className="text-stat text-stat-title">
-                    tCET raised of {goal} tCET goal
+                    TRX raised of {goal} TRX goal
                   </span>
                 </h2>
               </div>
@@ -354,7 +353,7 @@ window.location.reload()
                 <div className='d-flex flex-column m-3'>
                   <h6 className="Auction Grey-text smallgrey">Current bid</h6>
                   <h6 className="Auction priceText bidprice">
-                    {listItem.price} tCET
+                    {listItem.price} TRX
                   </h6>
                   <h6 name="date" date={date} className="Auction Grey-text smallgrey">
                     {dateleftBid}
@@ -402,7 +401,7 @@ window.location.reload()
         }}
         contract={contract}
         tokenId={selectid}
-        senderAddress={window.ethereum.selectedAddress}
+        senderAddress={window.tronWeb.defaultAddress.base58}
         toAddress={selectedAddress}
         type={selecttype}
         eventId={eventId}
@@ -422,7 +421,7 @@ window.location.reload()
           setDonateModalShow(false)
         }}
         contract={contract}
-        senderAddress={window.ethereum.selectedAddress}
+        senderAddress={window.tronWeb.defaultAddress.base58}
         EventID={eventId}
         type={'NFT'}
         SelectedTitle={title}
@@ -435,7 +434,7 @@ window.location.reload()
         }}
         eventId={eventId}
         contract={contract}
-        senderAddress={window.ethereum.selectedAddress}
+        senderAddress={window.tronWeb.defaultAddress.base58}
         EventWallet={EventWallet} /></>
     </>
   )

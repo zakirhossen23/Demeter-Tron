@@ -105,7 +105,7 @@ export default function User() {
       <h2>NFTs</h2>
       {(NFTs.length === 0) ? (<><h6>No items</h6></>) : (
         <div className="gap-3 won-nft-grid user">
-          {NFTs.map((listItem) => (<NFTComponent key={listItem.TokenId} Id={listItem.Id} EventID={listItem.EventID} name={listItem.name} price={listItem.price} isGifted={listItem.isGift} image={listItem.image} signer={window.ethereum.selectedAddress} wallet={PROFILE_ADDRESS} showingFunc={activateGiftCardModal} unwrapingFunc={activateUnwrapGiftCardModal} />))}
+          {NFTs.map((listItem) => (<NFTComponent key={listItem.TokenId} Id={listItem.Id} EventID={listItem.EventID} name={listItem.name} price={listItem.price} isGifted={listItem.isGift} image={listItem.image} signer={window.tronWeb.defaultAddress.base58} wallet={PROFILE_ADDRESS} showingFunc={activateGiftCardModal} unwrapingFunc={activateUnwrapGiftCardModal} />))}
         </div>)}
     </div>
    

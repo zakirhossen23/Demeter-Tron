@@ -10,10 +10,10 @@ export default function Welcome() {
 	function donateCLICK() {
 		if (typeof window.ethereum === "undefined") {
 			window.open(
-			  "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
+			  "https://chrome.google.com/webstore/detail/TronLink/nkbihfbeogaeaoehlefnkodbefgpgknn",
 			  "_blank"
 			);
-		  } else  if (window.ethereum.selectedAddress == null || window.localStorage.getItem("ConnectedMetaMask") !== "true") {
+		  } else  if (window.tronWeb.defaultAddress.base58 == null || window.localStorage.getItem("TronLink") !== "true") {
 			router.push("/login?[/donation]");
 		  } else {
 			router.push("/donation");
@@ -22,15 +22,15 @@ export default function Welcome() {
 
 	function CreateEventsCLICK() {
 		if (typeof window.ethereum === 'undefined') {
-			window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank");
+			window.open("https://chrome.google.com/webstore/detail/TronLink/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank");
 		} else {
 			router.push('/CreateEvents');
 		}
 	}
 	return (<>
 		<Head>
-			<title>CoinexGift</title>
-			<meta name="description" content="CoinexGift" />
+			<title>Demeter</title>
+			<meta name="description" content="Demeter" />
 			<link rel="icon" href="/favicon.ico" />
 		</Head>
 		<Header></Header>

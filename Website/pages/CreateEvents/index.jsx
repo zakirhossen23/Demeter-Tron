@@ -10,7 +10,7 @@ import isServer from '../../components/isServer'
 import { NFTStorage, File } from 'nft.storage'
 import Web3 from 'web3'
 export default function CreateEvents() {
-  const { contract, signerAddress } = useContract('ERC721')
+  const { contract, signerAddress } = useContract()
   const [EventImage, setEventImage] = useState([])
   if (isServer()) return null
 
@@ -41,7 +41,7 @@ export default function CreateEvents() {
   const [EventGoal, EventGoalInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
-    placeholder: 'Event Goal in tCET',
+    placeholder: 'Event Goal in TRX',
     id: 'goal',
   })
 
@@ -67,8 +67,6 @@ export default function CreateEvents() {
 
   //Function after clicking Create Event Button
   async function createEvent() {
-    const web3 = new Web3(window.ethereum)
-    const account = await web3.eth.getAccounts()
 
     var CreateEVENTBTN = document.getElementById('CreateEVENTBTN')
     CreateEVENTBTN.disabled = true
@@ -111,7 +109,7 @@ export default function CreateEvents() {
         },
         wallet: {
           type: 'string',
-          description: window.ethereum.selectedAddress,
+          description: window.tronWeb.defaultAddress.base58,
         },
         typeimg: {
           type: 'string',
@@ -124,18 +122,17 @@ export default function CreateEvents() {
     try {
       // Creating Event in EVM
       await contract
-        .createEvent(window.ethereum.selectedAddress, JSON.stringify(createdObject))
+        .createEvent(window.tronWeb.defaultAddress.base58, JSON.stringify(createdObject))
         .send({
-          from:window.ethereum.selectedAddress,
-          gasPrice: 500000000000,
-          gas: 5_000_000,
+          feeLimit: 1_000_000_000,
+          shouldPollResponse: false
         })
 
       //Getting the event id of new one
       let eventid = await contract.totalEvent().call()
       if (document.getElementById('plugin').checked) {
         await CreatePlugin(
-          `http://${window.location.host}/donation/auction?[${Number(eventid)-1}]`,
+          `http://${window.location.host}/donation/auction?[${Number(eventid) - 1}]`,
         )
       }
     } catch (error) {
@@ -175,11 +172,7 @@ export default function CreateEvents() {
   }
   function FilehandleChange(event) {
     // If user uploaded images/videos
-    var allNames = []
-    for (let index = 0; index < event.target.files.length; index++) {
-      const element = event.target.files[index].name
-      allNames.push(element)
-    }
+
     for (let index2 = 0; index2 < event.target.files.length; index2++) {
       setEventImage((pre) => [...pre, event.target.files[index2]])
     }
@@ -264,35 +257,29 @@ export default function CreateEvents() {
                   <div className="Event-UploadedFileContainer">
                     {EventImage.map((item, i) => {
                       return (
-                        <>
-                          <div key={i} className="Event-Images">
-                            <button
-                              onClick={DeleteSelectedImages}
-                              name="deleteBTN"
-                              id={i}
-                            >
-                              X
-                            </button>
-                            {item.type.includes('image') ? (
-                              <img
-                                className="Event-Images-imagebox"
-                                src={URL.createObjectURL(item)}
-                              />
-                            ) : (
-                              <>
-                                <div className="Event-Uploaded-File-Container">
-                                  <img
-                                    className="Event-Uploaded-File-clip-icon"
-                                    src="https://cdn1.iconfinder.com/data/icons/web-page-and-iternet/90/Web_page_and_internet_icons-10-512.png"
-                                  />
-                                  <span className="Event-Uploaded-File-name">
-                                    {item.name.substring(0, 10)}...
-                                  </span>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </>
+                        <div key={item.name} className="Event-Images">
+                          <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
+                            X
+                          </button>
+                          {item.type.includes('image') ? (
+                            <img
+                              className="Event-Images-imagebox"
+                              src={URL.createObjectURL(item)}
+                            />
+                          ) : (
+                            <>
+                              <div className="Event-Uploaded-File-Container">
+                                <img
+                                  className="Event-Uploaded-File-clip-icon"
+                                  src="https://cdn1.iconfinder.com/data/icons/web-page-and-iternet/90/Web_page_and_internet_icons-10-512.png"
+                                />
+                                <span className="Event-Uploaded-File-name">
+                                  {item.name.substring(0, 10)}...
+                                </span>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       )
                     })}
                     <div className="Event-ImageAdd">

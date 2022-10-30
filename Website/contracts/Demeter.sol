@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract CoinexERC721 is ERC721 {
+contract Demeter {
 	uint256 private _tokenIds;
 	uint256 private _bidIds;
 	uint256 private _eventIds;
@@ -24,16 +23,11 @@ contract CoinexERC721 is ERC721 {
 	mapping(string => string) private _eventTokens;		  //Not using
 	address public owner;
 
-constructor(string memory name, string memory symbol)
-		ERC721(name, symbol)
-	{}
-
 function claimToken(
 		address _claimer,
 		string memory _tokenURI,
 		uint256 _eventid
 	) public returns (uint256) {	
-		_mint(_claimer, _tokenIds);	
 		_setTokenURI(_tokenIds, _tokenURI);
 		_setTokenEvent(_EventTokenIds, _eventid, _tokenURI);
 		_tokenIds++;
@@ -322,7 +316,6 @@ function tokenURI(uint256 tokenId)
 		public
 		view
 		virtual
-		override
 		returns (string memory)
 	{
 	

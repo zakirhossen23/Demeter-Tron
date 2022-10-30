@@ -48,34 +48,27 @@ export default function DirectDonateModal({
 
     try {
       activateWorkingModal("Transferring....")
-      const Web3 = require("web3")
-      const web3 = new Web3(window.ethereum)
-      const account = await web3.eth.getAccounts();
-      let AmountinFull = (Number(Amount) * 1000000000000000000).toLocaleString('fullwide', { useGrouping: false });
+   
+      let AmountinFull = (Number(Amount) * 1000000).toLocaleString('fullwide', { useGrouping: false });
       console.log("Donating")
 
-
-      const transaction = {
-        from: window.ethereum.selectedAddress,
-        to: EventWallet,
-        value: AmountinFull,
-        gasPrice: 500000000000,
-        gas: 5_000_000,
-      }
-
-      await web3.eth.sendTransaction(transaction) //Sending metamask confirmation
-
-
-      
+      var fromAddress = window.tronWeb.defaultAddress.base58; //address _from
+      // Create an unsigned TRX transfer transaction
+      const transactionobj = await tronWeb.transactionBuilder.sendTrx(
+            EventWallet,
+            AmountinFull,
+            fromAddress
+      );
+      const signedtxn = await tronWeb.trx.sign(transactionobj);
+      await tronWeb.trx.sendRawTransaction(signedtxn);
       const Raised = Number(await contract.getEventRaised(eventId).call()) + Number(Amount);
       activateWorkingModal("Done! Please confirm Updating Raised...")
 
       await contract							//Resending updating Raised 
         ._setEventRaised(Number(eventId), Raised.toString())
         .send({
-          from: window.ethereum.selectedAddress,
-          gasPrice: 500000000000,
-          gas: 5_000_000,
+          feeLimit: 1_000_000_000,
+          shouldPollResponse: false
         })
 
       activateWorkingModal('Success!')
@@ -89,6 +82,7 @@ export default function DirectDonateModal({
       activateWarningModal(`Error! Please try again!`)
       var alertELM = document.getElementById('workingalert')
       alertELM.style.display = 'none'
+      DonateBTN.disabled = false;
       return
     }
   }
@@ -115,7 +109,7 @@ export default function DirectDonateModal({
       
 
           <Form.Group className="mb-3" controlId="formGroupName">
-            <Form.Label>Amount in tCET</Form.Label>
+            <Form.Label>Amount in TRX</Form.Label>
             {AmountInput}
           </Form.Group>
           <div className="d-grid">

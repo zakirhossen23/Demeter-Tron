@@ -10,7 +10,7 @@ import isServer from '../..//components/isServer'
 export default function Donation() {
   //Variables
   const [CreatemodalShow, setModalShow] = useState(false)
-  const { contract, signerAddress } = useContract('ERC721')
+  const { contract, signerAddress } = useContract();
   const [list, setList] = useState([])
   const [selectid, setselectid] = useState('')
   const [selectedtype, setselectedtype] = useState('')
@@ -62,7 +62,7 @@ export default function Donation() {
             var n = new Date().getTime()
             var d = c - n
             var s = Math.floor((d % (1000 * 60)) / 1000)
-            if (s.toString().includes('-') && object.properties.wallet.description !== window.ethereum.selectedAddress) {
+            if (s.toString().includes('-') && object.properties.wallet.description !== window.tronWeb.defaultAddress.base58) {
               continue
             }
 
@@ -165,14 +165,14 @@ export default function Donation() {
                 <div style={{ display: 'flex', whiteSpace: 'pre-wrap' }}>
                   <h6 className="donation event-goal-price">Goal: </h6>
                   <h6 className="donation event-goal-price">
-                    {listItem.Goal} tCET
+                    {listItem.Goal} TRX
                   </h6>
                 </div>
                 <div style={{ display: 'flex', whiteSpace: 'pre-wrap' }}>
                   <h6 className="donation event-goal-price">Owner: </h6>
                   <a href={`/user/${listItem.wallet}`} >
                     <h6 className="donation event-owner-address event-goal-price">
-                      {listItem.wallet} {(listItem.wallet != window.ethereum.selectedAddress) ? (<></>) : (<>(Me)</>)}
+                      {listItem.wallet} {(listItem.wallet != window.tronWeb.defaultAddress.base58) ? (<></>) : (<>(Me)</>)}
                     </h6>
                   </a>
                 </div>
@@ -251,7 +251,7 @@ export default function Donation() {
           setModalShow(false)
         }}
         contract={contract}
-        senderAddress={window.ethereum.selectedAddress}
+        senderAddress={window.tronWeb.defaultAddress.base58}
         EventID={selectid}
         type={selectedtype}
         SelectedTitle={SelectedTitle}

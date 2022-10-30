@@ -98,14 +98,12 @@ export default function DonateNFTModal({
     //Calling smart contract method(functon) to store in to EVM
     const result = await contract
       .claimToken(
-        window.ethereum.selectedAddress,
         JSON.stringify(createdObject),
         EventID,
       )
       .send({
-        from: window.ethereum.selectedAddress,
-        gasPrice: 500000000000,
-        gas: 5_000_000,
+        feeLimit: 1_000_000_000,
+        shouldPollResponse: false
       })
     await window.document.getElementsByClassName('btn-close')[0].click()
     window.location.href = `/donation/auction?[${EventID}]` //Going to that event auction page
@@ -135,7 +133,7 @@ export default function DonateNFTModal({
             {descriptionInput}
           </Form.Group>
           <Form.Group className="mb-3" controlId="formGroupName">
-            <Form.Label>Opening price in tCET</Form.Label>
+            <Form.Label>Opening price in TRX</Form.Label>
             {priceInput}
           </Form.Group>
 

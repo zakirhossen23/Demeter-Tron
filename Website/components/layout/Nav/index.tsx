@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import NavLink from 'next/link';
-import useContract from '../../../services/useContract';
 
 declare let window: any;
 
@@ -14,13 +13,11 @@ export function Nav(): JSX.Element {
         if (window.ethereum == null) {
             window.document.getElementById("withoutSign").style.display = "none";
             window.document.getElementById("withSign").style.display = "none";
-            window.document.getElementById("installMetaMask").style.display = "";
+            window.document.getElementById("installTronLink").style.display = "";
             return;
         }
-        if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
-            const Web3 = require("web3")
-            const web3 = new Web3(window.ethereum)
-            let Balance = await web3.eth.getBalance(window.ethereum.selectedAddress);
+        if (window.tronWeb.defaultAddress.base58 != null && window.localStorage.getItem("TronLink") == "true") {
+            let Balance = await window.tronWeb.trx.getBalance(window.tronWeb.defaultAddress.base58);
 
             let subbing = 10;
 
@@ -29,10 +26,10 @@ export function Nav(): JSX.Element {
 
             }
             
-            setAccFull(window.ethereum.selectedAddress);
-            setAcc(window.ethereum.selectedAddress.toString().substring(0, subbing) + "...");
+            setAccFull(window.tronWeb.defaultAddress.base58);
+            setAcc(window.tronWeb.defaultAddress.base58.toString().substring(0, subbing) + "...");
 
-            setBalance(Balance / 1000000000000000000 + " tCET");
+            setBalance(Balance / 1000000 + " TRX");
             setSigned(true);
             try {
 
@@ -72,8 +69,8 @@ export function Nav(): JSX.Element {
     }
 
 
-    async function onClickDisConnectMetaMask() {
-        window.localStorage.setItem("ConnectedMetaMask", "")
+    async function onClickDisConnectTronLink() {
+        window.localStorage.setItem("TronLink", "")
         window.localStorage.setItem("Type", "")
         window.location.href = "/"
     }
@@ -93,11 +90,11 @@ export function Nav(): JSX.Element {
                             </div>
                         </NavLink>
                     </div>
-                    <div id='installMetaMask' style={{ display: "none" }} className="wallets">
+                    <div id='installTronLink' style={{ display: "none" }} className="wallets">
 
                         <div className="wallet">
-                            <button type="button" onClick={() => { window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank") }} className="btn btn-secondary installBTN" aria-disabled="false">
-                                Metamask
+                            <button type="button" onClick={() => { window.open("https://chrome.google.com/webstore/detail/TronLink/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank") }} className="btn btn-secondary installBTN" aria-disabled="false">
+                                TronLink
                             </button>
                         </div>
                     </div>
@@ -116,7 +113,7 @@ export function Nav(): JSX.Element {
                                         {Balance}
                                     </div>
                                 </div>
-                                <button type="button" onClick={onClickDisConnectMetaMask} className="btn btn-logout" style={{ padding: 0 }}>
+                                <button type="button" onClick={onClickDisConnectTronLink} className="btn btn-logout" style={{ padding: 0 }}>
                                     <span className="icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" height={32} width={32} style={{ fill: "rgb(255 0 0)" }}>
                                             <path

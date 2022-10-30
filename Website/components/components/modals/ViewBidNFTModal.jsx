@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import useContract from '../../../services/useContract'
 
 export default function ViewmodalShow({ show, onHide, id, title }) {
-  const { contract, signerAddress } = useContract('ERC725')
+  const { contract, signerAddress } = useContract()
   const [list, setList] = useState([])
 
   function addZero(num) {
@@ -122,7 +122,7 @@ export default function ViewmodalShow({ show, onHide, id, title }) {
                     </a>
                   </div>
                   <div className="tableRowCellBidContainer">
-                    <h7 className="cell">{listItem.bidprice} tCET</h7>
+                    <h7 className="cell">{listItem.bidprice} TRX</h7>
                   </div>
                 </div>
               </div>

@@ -59,7 +59,7 @@ export default function SendAsGiftCardModal({
         Message: Message,
         FontType: FontType,
         NameUser: NameUser,
-        Wallet:window.ethereum.selectedAddress
+        Wallet:window.tronWeb.defaultAddress.base58
       }
 
       await contract
@@ -69,9 +69,8 @@ export default function SendAsGiftCardModal({
           JSON.stringify(createdObject)
         )
         .send({
-          from: window.ethereum.selectedAddress,
-          gasPrice: 500000000000,
-          gas: 5_000_000,
+          feeLimit:100_000_000,
+        shouldPollResponse:true
         })
 
       window.document.getElementsByClassName('btn-close')[0].click()
@@ -105,7 +104,7 @@ export default function SendAsGiftCardModal({
 
                 <div className='d-flex flex-column h-75 justify-content-center'>
                   <small style={{ fontFamily: FontType }} className={(FontType === "Tangerine, cursive") ? "fs-4" : ""}>
-                    You have given {TokenURI.price} tCET
+                    You have given {TokenURI.price} TRX
                   </small>
                   <small style={{ fontFamily: FontType }} className={(FontType === "Tangerine, cursive") ? "fs-4" : ""}>
                     {Message}

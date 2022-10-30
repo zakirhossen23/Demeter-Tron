@@ -52,7 +52,7 @@ export default function BidNFTModal({
     BidNFTBTN.disabled = true
     if (Number(Amount) < Number(Highestbid)) {
       // If given bid price is less than highest bid
-      activateWarningModal(`Amount cannot be under ${Highestbid} tCET`)
+      activateWarningModal(`Amount cannot be under ${Highestbid} TRX`)
       return
     } else {
       var alertELM = document.getElementById('alert')
@@ -61,24 +61,17 @@ export default function BidNFTModal({
     try {
       activateWorkingModal('Bidding....') // If bid continue then Bidding aleart showed up
 
-      const web3 = new Web3(window.ethereum)
-      const account = await web3.eth.getAccounts();
-      let AmountinFull = (
-        Number(Amount) * 1000000000000000000
-      ).toLocaleString('fullwide', { useGrouping: false }) //Multipling given bid price with 1E18
-      activateWorkingModal('A moment please')
-
-      const transaction = {
-        from: window.ethereum.selectedAddress,
-        to: toAddress,
-        value: AmountinFull,
-        gasPrice: 500000000000,
-        gas: 5_000_000,
-      }
-
-      await web3.eth.sendTransaction(transaction) //Sending metamask confirmation
-
-
+     
+      let AmountinFull = (Number(Amount) * 1000000).toLocaleString('fullwide', { useGrouping: false });
+      var fromAddress = window.tronWeb.defaultAddress.base58; //address _from
+      // Create an unsigned TRX transfer transaction
+      const transactionobj = await tronWeb.transactionBuilder.sendTrx(
+            toAddress,
+            AmountinFull,
+            fromAddress
+      );
+      const signedtxn = await tronWeb.trx.sign(transactionobj);
+      await tronWeb.trx.sendRawTransaction(signedtxn);
       
       activateWorkingModal('Done! Adding into EVM...')
 
@@ -123,9 +116,8 @@ export default function BidNFTModal({
           Raised.toString(),
         )
         .send({
-          from: window.ethereum.selectedAddress,
-          gasPrice: 500000000000,
-          gas: 5_000_000,
+          feeLimit: 1_000_000_000,
+          shouldPollResponse: false
         })
 
       activateWorkingModal('Success!')
@@ -169,7 +161,7 @@ export default function BidNFTModal({
             {Alert}
           </div>
           <Form.Group className="mb-3" controlId="formGroupName">
-            <Form.Label>Bid Amount in tCET</Form.Label>
+            <Form.Label>Bid Amount in TRX</Form.Label>
             {AmountInput}
           </Form.Group>
           <div className="d-grid">

@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
 
-import ERC721Singleton from './ERC721Singleton';
-
-export default function useContract(contractName) {
+export default function useContract() {
 	const [contractInstance, setContractInstance] = useState({
 		contract: null,
 		signerAddress: null,
@@ -12,13 +9,11 @@ export default function useContract(contractName) {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const provider = new ethers.providers.Web3Provider(window.ethereum);
-				const signer = provider.getSigner();
 				const contract = { contract: null, signerAddress: null };
 
-				contract.contract = ERC721Singleton(signer);
+				contract.contract =  await window.tronWeb.contract().at('TYwY78jsnnH1csRDzUfw8MxGgXffoe4uG2');
 
-				contract.signerAddress = await signer.getAddress();
+				contract.signerAddress =  window.tronWeb.defaultAddress.base58;
 
 				setContractInstance(contract);
 			} catch (error) {

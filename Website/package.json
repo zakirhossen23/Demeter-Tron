@@ -1,13 +1,12 @@
 {
-  "name": "DemeterGift",
+  "name": "Demeter",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "cd contracts && hardhat deploy --network coinex"
+    "lint": "next lint"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.6",

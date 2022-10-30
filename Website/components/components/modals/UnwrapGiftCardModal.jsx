@@ -76,9 +76,8 @@ export default function UnwrapGiftCardModal({
           TokenID.toString()
         )
         .send({
-          from: window.ethereum.selectedAddress,
-          gasPrice: 500000000000,
-          gas: 5_000_000,
+          feeLimit:100_000_000,
+        shouldPollResponse:true
         })
 
       window.document.getElementsByClassName('btn-close')[0].click()

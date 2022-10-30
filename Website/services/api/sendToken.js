@@ -9,25 +9,20 @@ export default async function send_token(
 	to_address,
 	private_key
 ) {
-	const provider = new ethers.providers.JsonRpcProvider("https://testnet-rpc.coinex.net")
+	const fullNode = 'https://api.nileex.io';
+	const solidityNode = 'https://api.nileex.io';
+	const eventServer = 'https://event.nileex.io';
+	const privateKey = privateKey;
+	const tronWeb = new TronWeb(fullNode, solidityNode, eventServer, private_key);
+	contract = await tronWeb.contract().at('TBT8DZwpUCdTknZvvyWbtjn5xG3LK9oqHz');
 
-	const walletSigner = new ethers.Wallet(private_key, provider);
-
-	let gas_price = ethers.utils.hexlify(parseInt(1000000))
-	console.log(`gas_price: ${gas_price}`)
-	
-	let send_account = await walletSigner.getAddress();
-	console.log(send_token_amount)
+	let send_account = await tronWeb.address.fromPrivateKey(private_key);
 	const tx = {
 		from: send_account,
 		to: to_address,
 		value: ethers.utils.parseEther(send_token_amount),
 	}
-	let transaction= await walletSigner.sendTransaction(tx);
-	let transactionReceipt = null
-	while (transactionReceipt == null) {
-		transactionReceipt = await provider.waitForTransaction(transaction.hash);
-		await sleep(1000)
-	}
+	await walletSigner.sendTransaction(tx);
+	
 	return send_account;
 }

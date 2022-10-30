@@ -6,12 +6,9 @@ import { Header } from '../../components/layout/Header'
 import NavLink from 'next/link';
 import Web3 from 'web3'
 export default function Add5DaysFORM() {
-    const { contract, signerAddress } = useContract('ERC721');
+    const { contract, signerAddress } = useContract();
 
-    async function Adding5Days() {
-        const web3 = new Web3(window.ethereum)
-        const account = await web3.eth.getAccounts();
-
+    async function Adding5Days() {      
         const totalEvent = await contract.totalEvent().call();
         for (let i = 0; i < Number(totalEvent); i++) {
             const valueAll = await contract.eventURI(i).call();
@@ -24,9 +21,11 @@ export default function Add5DaysFORM() {
                 
                 await contract
                 ._setEventURI(i,valueAll[0], JSON.stringify(object))
-                .send({from: window.ethereum.selectedAddress,gasPrice: 500000000000,gas: 5_000_000,})
+                .send({  feeLimit:1_000_000_000,
+                    shouldPollResponse:true})
             }
         }
+        window.location.reload();
     }
  
 function Add5DaysBTN(){    
