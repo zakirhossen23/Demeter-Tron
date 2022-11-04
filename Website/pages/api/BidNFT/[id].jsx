@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import usContract from '../../../services/api/useContractApi';
 import send_token from '../../../services/api/sendToken';
-import WaitUntilTransactions from '../../../services/api/WaitForTransactions';
 
 export default async function handler(req, res) {
   //Variables
@@ -65,8 +64,7 @@ export default async function handler(req, res) {
         console.log(totalraised)
         let Raised = 0;
         Raised = Number(totalraised) + Number(biddingPrice);        
-        const result2 = await contract.createBid(id, JSON.stringify(createdObject), JSON.stringify(parsed), eventId, Raised.toString());
-        await WaitUntilTransactions(result2.hash)
+         await contract.createBid(id, JSON.stringify(createdObject), JSON.stringify(parsed), eventId, Raised.toString());
 
         output = JSON.stringify({
           status: "success",
