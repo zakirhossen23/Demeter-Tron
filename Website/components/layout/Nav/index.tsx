@@ -10,7 +10,7 @@ export function Nav(): JSX.Element {
 
     const [isSigned, setSigned] = useState(false);
     async function fetchInfo() {
-        if (window.ethereum == null) {
+        if (window.tronLink == null) {
             window.document.getElementById("withoutSign").style.display = "none";
             window.document.getElementById("withSign").style.display = "none";
             window.document.getElementById("installTronLink").style.display = "";
