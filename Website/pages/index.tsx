@@ -10,7 +10,7 @@ export default function Welcome() {
 	function donateCLICK() {
 		if (typeof window.ethereum === "undefined") {
 			window.open(
-			  "https://chrome.google.com/webstore/detail/TronLink/nkbihfbeogaeaoehlefnkodbefgpgknn",
+			  "https://chrome.google.com/webstore/detail/tronlink/ibnejdfjmmkpcnlpebklmnkoeoihofec",
 			  "_blank"
 			);
 		  } else  if (window.tronWeb.defaultAddress.base58 == null || window.localStorage.getItem("TronLink") !== "true") {
@@ -22,7 +22,7 @@ export default function Welcome() {
 
 	function CreateEventsCLICK() {
 		if (typeof window.ethereum === 'undefined') {
-			window.open("https://chrome.google.com/webstore/detail/TronLink/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank");
+			window.open("https://chrome.google.com/webstore/detail/tronlink/ibnejdfjmmkpcnlpebklmnkoeoihofec", "_blank");
 		} else {
 			router.push('/CreateEvents');
 		}
